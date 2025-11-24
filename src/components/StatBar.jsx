@@ -1,0 +1,71 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+export default function StatBar({ name, xp, level, gainedXP }) {
+  const progressAnim = useRef(new Animated.Value(0)).current;
+  const gainAnim = useRef(new Animated.Value(0)).current;
+  const [showGain, setShowGain] = useState(false);
+
+  // Animate XP bar
+  useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: Math.min(xp, 100),
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+
+    if (gainedXP) {
+      setShowGain(true);
+      gainAnim.setValue(0);
+      Animated.timing(gainAnim, {
+        toValue: -30, // float up
+        duration: 1000,
+        useNativeDriver: true,
+      }).start(() => setShowGain(false));
+    }
+  }, [xp]);
+
+  const width = progressAnim.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+  });
+
+  return (
+    <View style={{ marginBottom: 12, position: 'relative' }}>
+      <Text style={styles.label}>{name} L{level} • {Math.floor(xp)} XP</Text>
+
+      {showGain && (
+        <Animated.View style={[styles.gainContainer, { transform: [{ translateY: gainAnim }] }]}>
+          <LinearGradient
+            colors={['#feae51', '#973cbf']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gainGradient}
+          >
+            <Text style={styles.gainText}>+{gainedXP} XP</Text>
+          </LinearGradient>
+        </Animated.View>
+      )}
+
+      <View style={styles.barBackground}>
+        <Animated.View style={{ width }}>
+          <LinearGradient
+            colors={['#feae51', '#973cbf']}
+            style={styles.barFill}
+          />
+        </Animated.View>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  label: { marginBottom: 4, color: '#ffffff', fontWeight: '600' },
+  xp: { fontSize: 14, color: '#ffffff', marginBottom: 4 },
+  barBackground: { height: 8, backgroundColor: '#333344', borderRadius: 4 },
+  barFill: { height: '100%', borderRadius: 4 },
+  gainContainer: { position: 'absolute', left: 0, top: -20 },
+  gainGradient: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 },
+  gainText: { fontWeight: 'bold', fontSize: 14, color: '#fff', textAlign: 'center' },
+});
