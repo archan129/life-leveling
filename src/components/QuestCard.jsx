@@ -6,6 +6,8 @@ export default function QuestCard({ quest, onComplete }) {
     return (
         <View style={styles.card}>
             <Text style={styles.title}>{quest.title}</Text>
+            <Text style={styles.description}>{quest.description}</Text>
+
             <Text style={styles.difficulty}>Difficulty: {quest.difficulty}</Text>
 
             <TouchableOpacity onPress={() => onComplete(quest)} style={styles.button}>
@@ -27,6 +29,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 5 },
     },
     title: { fontSize: 18, fontWeight: 'bold', color: colors.textPrimary, marginBottom: 6 },
+    description: { fontSize: 14, color: colors.textSecondary, marginBottom: 6 },
+
     difficulty: { fontSize: 14, color: colors.textSecondary, marginBottom: 10 },
     button: {
         padding: 12,
@@ -34,6 +38,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center'
     },
+    disabledButton: {
+        backgroundColor: '#555', // grey out completed quests
+    },
+
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
