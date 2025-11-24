@@ -7,6 +7,11 @@ export default function StatBar({ name, xp, level, gainedXP }) {
   const gainAnim = useRef(new Animated.Value(0)).current;
   const [showGain, setShowGain] = useState(false);
 
+  // Calculate required XP for next level dynamically
+  const requiredXP = 50 + level * 25; // same formula as leveling.js
+  const fillPercent = Math.min((xp / requiredXP) * 100, 100);
+
+
   // Animate XP bar
   useEffect(() => {
     Animated.timing(progressAnim, {
@@ -19,12 +24,12 @@ export default function StatBar({ name, xp, level, gainedXP }) {
       setShowGain(true);
       gainAnim.setValue(0);
       Animated.timing(gainAnim, {
-        toValue: -30, // float up
+        toValue: -30,
         duration: 1000,
         useNativeDriver: true,
       }).start(() => setShowGain(false));
     }
-  }, [xp]);
+  }, [xp, level]);
 
   const width = progressAnim.interpolate({
     inputRange: [0, 100],
@@ -33,7 +38,8 @@ export default function StatBar({ name, xp, level, gainedXP }) {
 
   return (
     <View style={{ marginBottom: 12, position: 'relative' }}>
-      <Text style={styles.label}>{name} L{level} • {Math.floor(xp)} XP</Text>
+      <Text style={styles.label}>{name} L{level} • {Math.floor(xp)}/{requiredXP} XP</Text>
+
 
       {showGain && (
         <Animated.View style={[styles.gainContainer, { transform: [{ translateY: gainAnim }] }]}>

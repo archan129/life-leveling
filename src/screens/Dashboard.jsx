@@ -2,10 +2,14 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import colors from '../styles/colors';
 
+function xpForNextLevel(level) {
+    return 50 + level * 25; // your formula
+}
+
 export default function Dashboard({ navigation, user }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Dashboard</Text>
+            <Text style={styles.title}>Archan</Text>
 
             <View style={styles.statsContainer}>
                 <View style={styles.card}>
@@ -14,8 +18,10 @@ export default function Dashboard({ navigation, user }) {
                 </View>
 
                 <View style={styles.card}>
-                    <Text style={styles.statLabel}>Total XP</Text>
-                    <Text style={styles.statValue}>{Math.floor(user.globalXP)}</Text>
+                    <Text style={styles.statLabel}>XP to Next Level</Text>
+                    <Text style={styles.statValue}>
+                        {xpForNextLevel(user.globalLevel) - Math.floor(user.globalXP)}
+                    </Text>
                 </View>
             </View>
 
