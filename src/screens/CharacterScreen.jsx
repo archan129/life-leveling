@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import StatBar from '../components/StatBar';
 import AbilityCard from '../components/AbilityCard';
 import colors from '../styles/colors';
@@ -16,7 +16,7 @@ function getSpriteForLevel(level) {
     return sprite1;
 }
 
-export default function CharacterScreen({ user }) {
+export default function CharacterScreen({ user, navigation }) {
     const sprite = getSpriteForLevel(user.globalLevel);
 
     return (
@@ -52,6 +52,13 @@ export default function CharacterScreen({ user }) {
                     <AbilityCard key={ab.id} ability={ab} />
                 ))}
             </View>
+            <TouchableOpacity
+                style={styles.settingsButton}
+                onPress={() => navigation.navigate('Settings')}
+            >
+                <Text style={styles.buttonText}>Settings</Text>
+            </TouchableOpacity>
+
         </ScrollView>
     );
 }
@@ -71,4 +78,17 @@ const styles = StyleSheet.create({
     subtitle: { fontSize: 22, fontWeight: 'bold', color: colors.textPrimary, marginVertical: 12 },
     statsContainer: { backgroundColor: colors.card, padding: 12, borderRadius: 12, marginBottom: 20 },
     abilitiesContainer: {},
+    settingsButton: {
+        padding: 12,
+        backgroundColor: colors.primary,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+
 });
