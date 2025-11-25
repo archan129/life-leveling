@@ -7,4 +7,7 @@ export const user = {
         Agility: { xp: 0, level: 1 },
         // add other stats here
     },
+    questProgress: {
+        // questId: { timesCompletedToday: 0, lastCompletedDate: 'YYYY-MM-DD' }
+    }
 };

@@ -12,10 +12,18 @@ export default function QuestLog({ user, setUser }) {
 
         const today = new Date().toDateString();
 
+
+
+        // Initialize quest progress if not exists
+        if (!user.questProgress[quest.id]) {
+            user.questProgress[quest.id] = { timesCompletedToday: 0, lastCompletedDate: today };
+        }
+
+        const progress = user.questProgress[quest.id];
         // Reset daily counter if it's a new day
-        if (quest.lastCompletedDate !== today) {
-            quest.timesCompletedToday = 0;
-            quest.lastCompletedDate = today;
+        if (progress.lastCompletedDate !== today) {
+            progress.timesCompletedToday = 0;
+            progress.lastCompletedDate = today;
 
         }
 
@@ -29,10 +37,15 @@ export default function QuestLog({ user, setUser }) {
         };
 
         // Check if daily limit hit
-        if (quest.dailyLimit && quest.timesCompletedToday == quest.dailyLimit) {
+        if (quest.dailyLimit && progress.timesCompletedToday == quest.dailyLimit) {
             alert("Daily limit reached for this quest.");
             return;
         }
+
+        // Increment daily count
+        progress.timesCompletedToday += 1;
+        progress.lastCompletedDate = today;
+
         // Calculate XP for user and stats
         const result = completeTask(user, quest);
 
@@ -61,8 +74,15 @@ export default function QuestLog({ user, setUser }) {
 
     return (
         <ScrollView style={styles.container}>
-            {quests.map((q) => (
-                <QuestCard key={q.id} quest={q} onComplete={() => handleComplete(q)} />
+            {questsData.map((q) => (
+                <QuestCard
+                    key={q.id}
+                    quest={{
+                        ...q,
+                        timesCompletedToday: user.questProgress[q.id]?.timesCompletedToday || 0
+                    }}
+                    onComplete={() => handleComplete(q)}
+                />
             ))}
         </ScrollView>
     );

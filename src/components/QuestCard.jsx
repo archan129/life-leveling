@@ -26,8 +26,8 @@ export default function QuestCard({ quest, onComplete }) {
             <Text style={styles.difficulty}>Difficulty: {quest.difficulty}</Text>
             <Text style={styles.limitText}>
                 {quest.dailyLimit
-                    ? `Used ${quest.timesCompletedToday}/${quest.dailyLimit} today`
-                    : 'No daily limit'}
+                    ? `Completed ${quest.timesCompletedToday}/${quest.dailyLimit} today`
+                    : ''}
             </Text>
             <TouchableOpacity
                 onPress={handlePress}

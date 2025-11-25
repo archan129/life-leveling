@@ -8,10 +8,14 @@ import CharacterScreen from './src/screens/CharacterScreen';
 
 import { user as initialUser } from './src/data/sampleData';
 
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(initialUser);
+  //const [quests, setQuests] = useState(initialQuests);
+
 
   return (
     <NavigationContainer>

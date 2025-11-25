@@ -7,7 +7,6 @@ export const quests = [
         statMap: { Strength: 1 },
         type: 'daily',
         repeatable: true,
-        dailyLimit: 10,
         timesCompletedToday: 0,
         lastCompletedDate: null,
         completed: false,
