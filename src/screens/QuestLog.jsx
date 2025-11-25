@@ -61,12 +61,6 @@ export default function QuestLog({ user, setUser }) {
         await AsyncStorage.setItem('@global_xp', updatedUser.globalXP.toString());
         await AsyncStorage.setItem('@quest_progress', JSON.stringify(updatedUser.questProgress));
 
-        for (const statName in updatedUser.stats) {
-            const stat = updatedUser.stats[statName];
-            await AsyncStorage.setItem(`@stat_${statName}_level`, stat.level.toString());
-            await AsyncStorage.setItem(`@stat_${statName}_xp`, stat.xp.toString());
-        }
-
 
 
         // Mark quest as completed

@@ -77,14 +77,13 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName={hasName ? "Dashboard" : "NewUser"}>
 
-        {!hasName && (
-          <Stack.Screen name="NewUser">
-            {props => <NewUserScreen {...props} setUser={setUser} setHasName={setHasName} />}
-          </Stack.Screen>
-        )}
+        {/* Always include NewUser screen */}
+        <Stack.Screen name="NewUser">
+          {props => <NewUserScreen {...props} setUser={setUser} setHasName={setHasName} />}
+        </Stack.Screen>
 
         <Stack.Screen name="Settings">
-          {props => <SettingsScreen {...props} user={user} setUser={setUser} />}
+          {props => <SettingsScreen {...props} user={user} setUser={setUser} setHasName={setHasName} />}
         </Stack.Screen>
 
         <Stack.Screen name="Dashboard">
