@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import colors from '../styles/colors';
 
 function xpForNextLevel(level) {
-    return 50 + level * 25; // your formula
+    return Math.floor(50 + Math.pow(level, 2) * 5);
 }
+
 
 export default function Dashboard({ navigation, user }) {
     return (
@@ -13,7 +14,7 @@ export default function Dashboard({ navigation, user }) {
 
             <View style={styles.statsContainer}>
                 <View style={styles.card}>
-                    <Text style={styles.statLabel}>Global Level</Text>
+                    <Text style={styles.statLabel}>Level</Text>
                     <Text style={styles.statValue}>{user.globalLevel}</Text>
                 </View>
 

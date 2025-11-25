@@ -6,8 +6,8 @@ import { completeTask } from '../utils/leveling';
 
 export default function QuestLog({ user, setUser }) {
     const [quests, setQuests] = React.useState([
-        { id: 1, title: 'Do 10 push-ups', description: 'Simple push-ups to get started', difficulty: 2, statMap: { Agility: 1 } },
-        { id: 2, title: 'Read 10 pages', description: 'Read to improve your knowledge', difficulty: 1, statMap: { Intelligence: 1 } },
+        { id: 1, title: 'Do 10 push-ups', description: 'Simple push-ups to get started', difficulty: 1, statMap: { Strength: 1 } },
+        { id: 2, title: 'Read 10 pages', description: 'Read to improve your knowledge', difficulty: 2, statMap: { Intelligence: 1 } },
     ]);
     const handleComplete = (quest) => {
 

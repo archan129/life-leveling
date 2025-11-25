@@ -1,6 +1,6 @@
 
 function xpForNextLevel(level) {
-    return 50 + level * 25; // example: increases by 25 each level
+    return Math.floor(50 + Math.pow(level, 2) * 5);
 }
 
 export function completeTask(user, task) {
