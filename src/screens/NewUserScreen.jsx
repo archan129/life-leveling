@@ -4,7 +4,7 @@ import colors from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function NewUserScreen({ setUser, navigation }) {
+export default function NewUserScreen({ setUser, navigation, setHasName }) {
     const [name, setName] = useState('');
 
 

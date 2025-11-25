@@ -72,6 +72,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={hasName ? "Dashboard" : "NewUser"}>
+
         {!hasName && (
           <Stack.Screen name="NewUser">
             {props => <NewUserScreen {...props} setUser={setUser} setHasName={setHasName} />}
@@ -79,10 +80,11 @@ export default function App() {
         )}
 
         <Stack.Screen name="Settings">
-          {props => <SettingsScreen {...props} />}
+          {props => <SettingsScreen {...props} user={user} setUser={setUser} />}
         </Stack.Screen>
+
         <Stack.Screen name="Dashboard">
-          {props => <Dashboard {...props} user={user} />}
+          {props => <Dashboard {...props} user={user} setUser={setUser} />}
         </Stack.Screen>
 
         <Stack.Screen name="QuestLog">
@@ -90,9 +92,11 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen name="Character">
-          {props => <CharacterScreen {...props} user={user} />}
+          {props => <CharacterScreen {...props} user={user} setUser={setUser} />}
         </Stack.Screen>
+
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
