@@ -9,5 +9,7 @@ export const user = {
     },
     questProgress: {
         // questId: { timesCompletedToday: 0, lastCompletedDate: 'YYYY-MM-DD' }
-    }
+    },
+    characterName: '',
+    isNewUser: true,
 };

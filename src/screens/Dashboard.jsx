@@ -10,7 +10,7 @@ function xpForNextLevel(level) {
 export default function Dashboard({ navigation, user }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Archan</Text>
+            <Text style={styles.title}>{user.name || 'Player'}</Text>
 
             <View style={styles.statsContainer}>
                 <View style={styles.card}>

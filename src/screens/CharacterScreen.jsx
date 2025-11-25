@@ -19,7 +19,9 @@ export default function CharacterScreen({ user }) {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Archan</Text>
+            {/*<Text style={styles.title}>Archan</Text>*/}
+            <Text style={styles.characterName}>{user.name || 'Player'}</Text>
+
 
             {/* Character sprite */}
             <View style={styles.spriteContainer}>
@@ -55,6 +57,13 @@ export default function CharacterScreen({ user }) {
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 20, backgroundColor: colors.background },
     title: { fontSize: 28, fontWeight: 'bold', color: colors.textPrimary, marginBottom: 20 },
+    characterName: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: colors.textPrimary,
+        marginBottom: 12,
+        textAlign: 'left',
+    },
     spriteContainer: { alignItems: 'center', marginBottom: 20 },
     sprite: { width: 300, height: 300 }, // Increased size
     subtitle: { fontSize: 22, fontWeight: 'bold', color: colors.textPrimary, marginVertical: 12 },
