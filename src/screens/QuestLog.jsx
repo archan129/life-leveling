@@ -3,14 +3,36 @@ import { ScrollView, StyleSheet } from 'react-native';
 import QuestCard from '../components/QuestCard';
 import colors from '../styles/colors';
 import { completeTask } from '../utils/leveling';
+import questsData from '../data/quests';
+
 
 export default function QuestLog({ user, setUser }) {
-    const [quests, setQuests] = React.useState([
-        { id: 1, title: 'Do 10 push-ups', description: 'Simple push-ups to get started', difficulty: 1, statMap: { Strength: 1 } },
-        { id: 2, title: 'Read 10 pages', description: 'Read to improve your knowledge', difficulty: 2, statMap: { Intelligence: 1 } },
-    ]);
+    const [quests, setQuests] = React.useState(questsData);;
     const handleComplete = (quest) => {
 
+        const today = new Date().toDateString();
+
+        // Reset daily counter if it's a new day
+        if (quest.lastCompletedDate !== today) {
+            quest.timesCompletedToday = 0;
+            quest.lastCompletedDate = today;
+
+        }
+
+
+
+        // Count today's completion
+        const updatedQuest = {
+            ...quest,
+            timesCompletedToday: quest.timesCompletedToday + 1,
+            lastCompletedDate: today,
+        };
+
+        // Check if daily limit hit
+        if (quest.dailyLimit && quest.timesCompletedToday == quest.dailyLimit) {
+            alert("Daily limit reached for this quest.");
+            return;
+        }
         // Calculate XP for user and stats
         const result = completeTask(user, quest);
 
@@ -18,8 +40,9 @@ export default function QuestLog({ user, setUser }) {
         setUser({ ...result.user });
 
         // Mark quest as completed
+        // Update quest progress
         const updatedQuests = quests.map(q =>
-            q.id === quest.id ? { ...q, completed: true } : q
+            q.id === quest.id ? updatedQuest : q
         );
         setQuests(updatedQuests); // <-- we need a state for quests
 
