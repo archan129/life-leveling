@@ -5,10 +5,13 @@ import colors from '../styles/colors';
 import { completeTask } from '../utils/leveling';
 import questsData from '../data/quests';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function QuestLog({ user, setUser }) {
     const [quests, setQuests] = React.useState(questsData);;
-    const handleComplete = (quest) => {
+    const handleComplete = async (quest) => {
 
         const today = new Date().toDateString();
 
@@ -47,15 +50,29 @@ export default function QuestLog({ user, setUser }) {
         progress.lastCompletedDate = today;
 
         // Calculate XP for user and stats
-        const result = completeTask(user, quest);
+        const result = await completeTask(user, quest);
 
         // Update state
-        setUser({ ...result.user });
+        const updatedUser = { ...result.user, questProgress: { ...user.questProgress } };
+        setUser(updatedUser);
+
+        //Persist User Storage
+        await AsyncStorage.setItem('@global_level', updatedUser.globalLevel.toString());
+        await AsyncStorage.setItem('@global_xp', updatedUser.globalXP.toString());
+        await AsyncStorage.setItem('@quest_progress', JSON.stringify(updatedUser.questProgress));
+
+        for (const statName in updatedUser.stats) {
+            const stat = updatedUser.stats[statName];
+            await AsyncStorage.setItem(`@stat_${statName}_level`, stat.level.toString());
+            await AsyncStorage.setItem(`@stat_${statName}_xp`, stat.xp.toString());
+        }
+
+
 
         // Mark quest as completed
         // Update quest progress
         const updatedQuests = quests.map(q =>
-            q.id === quest.id ? updatedQuest : q
+            q.id === quest.id ? { ...q, timesCompletedToday: progress.timesCompletedToday } : q
         );
         setQuests(updatedQuests); // <-- we need a state for quests
 

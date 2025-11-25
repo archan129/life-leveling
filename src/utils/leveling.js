@@ -1,9 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 function xpForNextLevel(level) {
     return Math.floor(50 + Math.pow(level, 2) * 5);
 }
 
-export function completeTask(user, task) {
+export async function completeTask(user, task) {
     const gainedXP = task.difficulty * 10;
     user.globalXP += gainedXP;
 
@@ -32,6 +35,18 @@ export function completeTask(user, task) {
         user.globalLevel += 1;
         user.globalXP -= globalRequiredXP;
         globalLeveled = true;
+    }
+
+    //  Persist global level and XP
+    try {
+        await AsyncStorage.setItem('@global_level', user.globalLevel.toString());
+        await AsyncStorage.setItem('@global_xp', user.globalXP.toString());
+        await AsyncStorage.setItem('@stats', JSON.stringify(user.stats));
+
+        await AsyncStorage.setItem('@quest_progress', JSON.stringify(user.questProgress));
+
+    } catch (e) {
+        console.log('Error saving global data:', e);
     }
 
 

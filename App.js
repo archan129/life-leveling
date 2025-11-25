@@ -23,23 +23,48 @@ export default function App() {
   const [hasName, setHasName] = useState(false);
 
   useEffect(() => {
-    const loadName = async () => {
+    const loadUserData = async () => {
       try {
         const savedName = await AsyncStorage.getItem('@character_name');
-        if (savedName) {
-          setUser(prev => ({ ...prev, name: savedName }));
-          setIsNewUser(false); // user exists
+        const savedLevel = await AsyncStorage.getItem('@global_level');
+        const savedXP = await AsyncStorage.getItem('@global_xp');
+        const savedQuestProgress = await AsyncStorage.getItem('@quest_progress');
+        const savedStats = await AsyncStorage.getItem('@stats');
+
+
+        const loadedStats = {};
+        for (const statName in initialUser.stats) {
+          const savedStatLevel = await AsyncStorage.getItem(`@stat_${statName}_level`);
+          const savedStatXP = await AsyncStorage.getItem(`@stat_${statName}_xp`);
+          loadedStats[statName] = {
+            level: savedStatLevel ? parseInt(savedStatLevel, 10) : initialUser.stats[statName].level,
+            xp: savedStatXP ? parseInt(savedStatXP, 10) : initialUser.stats[statName].xp,
+            lastGainedXP: 0,
+          };
         }
+
+        setUser(prev => ({
+          ...prev,
+          name: savedName || prev.name,
+          globalLevel: savedLevel ? parseInt(savedLevel, 10) : prev.globalLevel,
+          globalXP: savedXP ? parseInt(savedXP, 10) : prev.globalXP,
+          questProgress: savedQuestProgress ? JSON.parse(savedQuestProgress) : {},
+          stats: savedStats ? JSON.parse(savedStats) : prev.stats,
+        }));
+
+        setHasName(!!savedName);
       } catch (e) {
-        console.log("Error loading name", e);
+        console.log('Error loading user data:', e);
       } finally {
         setLoading(false);
       }
     };
-    loadName();
+
+    loadUserData();
   }, []);
 
   if (loading) return null; // or a splash screen
+
 
 
 

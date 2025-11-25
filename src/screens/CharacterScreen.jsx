@@ -9,6 +9,8 @@ import sprite1 from '../assets/Character1.png'; // default sprite
 import sprite2 from '../assets/Character5.png'; // for level 5+
 
 
+
+
 function getSpriteForLevel(level) {
     if (level >= 5) return sprite2;
     return sprite1;
