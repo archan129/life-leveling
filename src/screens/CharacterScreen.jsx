@@ -31,16 +31,16 @@ export default function CharacterScreen({ user, navigation }) {
             </View>
 
 
+            {/* Stats */}
             <View style={styles.statsContainer}>
                 {Object.keys(user.stats).map(stat => (
                     <StatBar
                         key={stat}
-                        name={stat}
+                        name={stat} // Health, Strength, Endurance, etc.
                         xp={user.stats[stat].xp}
                         level={user.stats[stat].level}
-                        gainedXP={user.stats[stat].lastGainedXP || 0} // <-- new
+                        gainedXP={user.stats[stat].lastGainedXP || 0}
                     />
-
                 ))}
             </View>
 

@@ -40,7 +40,7 @@ export default function SettingsScreen({ navigation, user, setUser }) {
                             Alert.alert("Reset Complete", "All progress has been reset successfully!");
 
                             console.log("All User Data Deleted");
-                            navigation.replace('NewUser');
+                            navigation.replace('NewUserScreen');
                         } catch (e) {
                             console.log("Error resetting data:", e);
                             Alert.alert("Error", "Failed to reset data. Please try again.");

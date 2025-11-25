@@ -43,14 +43,18 @@ export default function App() {
           };
         }
 
+        const parsedStats = savedStats ? JSON.parse(savedStats) : {};
+        const mergedStats = { ...initialUser.stats, ...parsedStats }; // ensure all default stats exist
+
         setUser(prev => ({
           ...prev,
           name: savedName || prev.name,
           globalLevel: savedLevel ? parseInt(savedLevel, 10) : prev.globalLevel,
           globalXP: savedXP ? parseInt(savedXP, 10) : prev.globalXP,
           questProgress: savedQuestProgress ? JSON.parse(savedQuestProgress) : {},
-          stats: savedStats ? JSON.parse(savedStats) : prev.stats,
+          stats: mergedStats,
         }));
+
 
         setHasName(!!savedName);
       } catch (e) {

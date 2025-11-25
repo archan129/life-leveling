@@ -4,7 +4,7 @@ export const quests = [
         title: 'Do 10 push-ups',
         description: 'A quick set of push-ups to build your strength.',
         difficulty: 1,
-        statMap: { Strength: 1 },
+        statMap: { Health: 1 },
         type: 'daily',
         repeatable: true,
         timesCompletedToday: 0,
@@ -19,11 +19,26 @@ export const quests = [
         statMap: { Intelligence: 1 },
         type: 'daily',
         repeatable: true,
-        dailyLimit: 2,
+        //dailyLimit: 2,
+        timesCompletedToday: 0,
+        lastCompletedDate: null,
+        completed: false,
+    },
+
+    {
+        id: 3,
+        title: 'Drink water',
+        description: 'Stay hydrated to maintain your agility.',
+        difficulty: 1,
+        statMap: { Agility: 1 },
+        type: 'daily',
+        repeatable: true,
+        //dailyLimit: 10,
         timesCompletedToday: 0,
         lastCompletedDate: null,
         completed: false,
     },
 ];
+
 
 export default quests;
