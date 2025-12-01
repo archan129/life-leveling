@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import QuestCard from '../components/QuestCard';
 import colors from '../styles/colors';
 import { completeTask } from '../utils/leveling';
@@ -8,6 +8,24 @@ import { isQuestAvailable } from "../utils/isQuestAvailable";
 
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+function groupQuestsByStat(quests) {
+    const grouped = {};
+
+    quests.forEach((quest) => {
+        if (!quest.statMap || Object.keys(quest.statMap).length === 0) return;
+
+        // Use the first key as the primary stat
+        const primaryStat = Object.keys(quest.statMap)[0];
+
+        if (!grouped[primaryStat]) grouped[primaryStat] = [];
+        grouped[primaryStat].push(quest);
+    });
+
+    return grouped;
+}
+
 
 
 
@@ -83,31 +101,45 @@ export default function QuestLog({ user, setUser }) {
         }
     };
 
+    const grouped = groupQuestsByStat(quests, "primary");
 
 
     return (
         <ScrollView style={styles.container}>
-            {questsData.map((q) => {
-                const available = isQuestAvailable(q);
+            {Object.keys(grouped).map(statName => (
+                <View key={statName}>
+                    <Text style={styles.categoryTitle}>{statName}</Text>
 
-                return (
-                    <QuestCard
-                        key={q.id}
-                        quest={{
-                            ...q,
-                            timesCompletedToday: user.questProgress[q.id]?.timesCompletedToday || 0,
-                        }}
-                        disabled={!available}
-                        lockedReason={!available ? `Available from ${q.availableFrom} to ${q.availableTo}` : null}
-                        onComplete={() => available && handleComplete(q)}
-                    />
-                );
-            })}
+                    {grouped[statName].map((q) => (
+                        <QuestCard
+                            key={q.id}
+                            quest={{
+                                ...q,
+                                timesCompletedToday: user.questProgress[q.id]?.timesCompletedToday || 0
+                            }}
+                            onComplete={() => handleComplete(q)}
+                        />
+                    ))}
+                </View>
+            ))}
         </ScrollView>
     );
 
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20, backgroundColor: colors.background },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: colors.background
+    },
+
+    categoryTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginTop: 20,
+        marginBottom: 10,
+    },
 });
+
