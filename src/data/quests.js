@@ -1,3 +1,6 @@
+import { isQuestAvailable } from "../utils/isQuestAvailable";
+
+
 export const quests = [
     {
         id: 1,
@@ -96,7 +99,26 @@ export const quests = [
         lastCompletedDate: null,
         completed: false,
     },
+
+    {
+        id: 8,
+        title: 'Eat Lunch',
+        description: 'Nourish your body at a set time',
+        difficulty: 1,
+        statMap: { Discipline: 1 },
+        type: 'daily',
+        repeatable: true,
+        //dailyLimit: 10,
+        timesCompletedToday: 0,
+        lastCompletedDate: null,
+        completed: false,
+
+        availableFrom: "10:00",   // 11 AM
+        availableTo: "14:00",     // 2 PM
+    },
 ];
+
+
 
 
 export default quests;

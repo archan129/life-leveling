@@ -1,44 +1,55 @@
 import colors from '../styles/colors';
-import React, { useEffect } from 'react';
-import { View, Text, Button, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function QuestCard({ quest, onComplete }) {
+export default function QuestCard({ quest, onComplete, disabled, lockedReason }) {
 
+    const isDailyLimitReached =
+        quest.dailyLimit && quest.timesCompletedToday >= quest.dailyLimit;
 
-    const isDisabled = quest.dailyLimit && quest.timesCompletedToday >= quest.dailyLimit;
+    const fullyDisabled = disabled || isDailyLimitReached;
 
     const handlePress = () => {
-        if (isDisabled) {
+        if (fullyDisabled) {
             Alert.alert(
-                "Daily Limit Reached",
-                `You can only do "${quest.title}" ${quest.dailyLimit} times today.`
+                "Quest Locked",
+                lockedReason
+                    ? lockedReason
+                    : `Daily limit reached: ${quest.timesCompletedToday}/${quest.dailyLimit}`
             );
             return;
         }
+
         onComplete(quest);
-    }
+    };
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, fullyDisabled && styles.cardDisabled]}>
             <Text style={styles.title}>{quest.title}</Text>
             <Text style={styles.description}>{quest.description}</Text>
 
             <Text style={styles.difficulty}>Difficulty: {quest.difficulty}</Text>
-            <Text style={styles.limitText}>
-                {quest.dailyLimit
-                    ? `Completed ${quest.timesCompletedToday}/${quest.dailyLimit} today`
-                    : ''}
-            </Text>
+
+            {quest.dailyLimit ? (
+                <Text style={styles.limitText}>
+                    Completed {quest.timesCompletedToday}/{quest.dailyLimit}
+                </Text>
+            ) : null}
+
+            {lockedReason && (
+                <Text style={styles.lockedReason}>
+                    ⏱ {lockedReason}
+                </Text>
+            )}
+
             <TouchableOpacity
                 onPress={handlePress}
-                style={[
-                    styles.button,
-                    isDisabled ? styles.disabledButton : null
-                ]}
+                style={[styles.button, fullyDisabled && styles.disabledButton]}
             >
-                <Text style={styles.buttonText}>Complete</Text>
+                <Text style={styles.buttonText}>
+                    {fullyDisabled ? "Locked" : "Complete"}
+                </Text>
             </TouchableOpacity>
-
         </View>
     );
 }
@@ -54,14 +65,27 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         shadowOffset: { width: 0, height: 5 },
     },
+
+    cardDisabled: {
+        opacity: 0.55,
+    },
+
     title: { fontSize: 18, fontWeight: 'bold', color: colors.textPrimary, marginBottom: 6 },
     description: { fontSize: 14, color: colors.textSecondary, marginBottom: 6 },
 
     difficulty: { fontSize: 14, color: colors.textSecondary, marginBottom: 10 },
+
     limitText: {
         fontSize: 12,
         color: colors.textSecondary,
         marginBottom: 8,
+    },
+
+    lockedReason: {
+        fontSize: 12,
+        color: '#ffcc66',
+        marginBottom: 8,
+        fontWeight: '600',
     },
 
     button: {
@@ -70,8 +94,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center'
     },
+
     disabledButton: {
-        backgroundColor: '#555', // grey out completed quests
+        backgroundColor: '#555',
     },
 
     buttonText: {

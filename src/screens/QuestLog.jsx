@@ -4,6 +4,8 @@ import QuestCard from '../components/QuestCard';
 import colors from '../styles/colors';
 import { completeTask } from '../utils/leveling';
 import questsData from '../data/quests';
+import { isQuestAvailable } from "../utils/isQuestAvailable";
+
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -85,18 +87,25 @@ export default function QuestLog({ user, setUser }) {
 
     return (
         <ScrollView style={styles.container}>
-            {questsData.map((q) => (
-                <QuestCard
-                    key={q.id}
-                    quest={{
-                        ...q,
-                        timesCompletedToday: user.questProgress[q.id]?.timesCompletedToday || 0
-                    }}
-                    onComplete={() => handleComplete(q)}
-                />
-            ))}
+            {questsData.map((q) => {
+                const available = isQuestAvailable(q);
+
+                return (
+                    <QuestCard
+                        key={q.id}
+                        quest={{
+                            ...q,
+                            timesCompletedToday: user.questProgress[q.id]?.timesCompletedToday || 0,
+                        }}
+                        disabled={!available}
+                        lockedReason={!available ? `Available from ${q.availableFrom} to ${q.availableTo}` : null}
+                        onComplete={() => available && handleComplete(q)}
+                    />
+                );
+            })}
         </ScrollView>
     );
+
 }
 
 const styles = StyleSheet.create({
